@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <title>{{ suite.suiteName }}</title>
+        <style type="text/css">
+        body {
+            font-family: verdana;
+        }
+        h1 {
+            border-bottom: 1px solid #CCCCCC;
+        }
+        div#container {
+            width: 1024px;
+            margin: 0 auto;
+        }
+        a.failed, a.passed {
+            border: 1px solid white;
+            padding: 10px;
+            display: block;
+            color: white;
+            text-decoration: none;
+        }
+        a.failed {
+            background: #FF0000;
+        }
+        a.passed {
+            background: #CCCC00;
+        }
+        div.testcaseoutput {
+            border: 1px solid black;
+            padding: 10px;
+            display: none;
+        }
+        pre {
+            width: 100%;
+            overflow: auto;
+            word-wrap: break-word;
+        }
+        </style>
+        <script type="text/javascript" language="javascript">
+            function changeVisibility(id) {
+                d = document.getElementById(id);
+                if ( d.style.display == 'none' ) {
+                    d.style.display = 'block';
+                } else {
+                    d.style.display = 'none';
+                } 
+            }
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <h1>{{ suite.suiteName }}</h1>
+            <p>Start: <strong>{{ suite.statistics.startTime }}</strong></p>
+            <p>End: <strong>{{ suite.statistics.endTime }}</strong></p>
+            <h2>Failed ({{ suite.statistics.failed }})</h2>
+            {% for test_case in suite.tests %}
+                {% if test_case.result == False %}
+            <div><a href="#" class="failed" onClick="changeVisibility('testcaseoutputfailed{{loop.index}}')">{{ test_case.name }}</a><div>
+            <div class="testcaseoutput" id="testcaseoutputfailed{{loop.index}}"><pre>{{ test_case.output }}</pre></div>
+                {% endif %}
+            {% endfor %}
+            <h2>Passed ({{ suite.statistics.passed }})</h2>
+            {% for test_case in suite.tests %}
+                {% if test_case.result == True %}
+            <div><a href="#" class="passed" onClick="changeVisibility('testcaseoutputpassed{{loop.index}}')">{{ test_case.name }}</a><div>
+            <div class="testcaseoutput" id="testcaseoutputpassed{{loop.index}}"><pre>{{ test_case.output }}</pre></div>
+                {% endif %}
+            {% endfor %}
+        </div><!-- End of containter -->
+    </body>
+</html>

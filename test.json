@@ -1,0 +1,23 @@
+{
+	"suiteName" : "Test Suite",
+    "suiteDescription" : "This the testsuite",
+	"tests" : [
+		{ 
+			"name" : "Test #1",
+			"script" : "ls -l /"
+		},
+		{
+			"name" : "Test #2",
+			"script" : "/path/to/script2.sh"
+		},
+        {
+            "name" : "Test #3",
+            "script" : "/path/to/script3.sh"
+        },
+        {
+            "name" : "Test #4",
+            "script" : "for i in range $(seq 1 1000); do echo -n X ; done"
+        }
+
+	]	
+}

@@ -1,0 +1,45 @@
+#!/usr/bin/env /usr/bin/python
+
+import sys
+import json
+import commands
+from jinja2 import Template
+from tempfile import NamedTemporaryFile
+from datetime import datetime
+
+if __name__ == "__main__":
+    
+    try:
+        json_file = open(sys.argv[1], "r")
+    except IndexError:
+        sys.stderr.write("\n  Usage: %s  <json_file>\n\n" % ( sys.argv[0] ))
+        sys.exit(1)
+    except IOError as error:
+        sys.stderr.write("\n  %s\n\n" % ( error ))
+        sys.exit(2)
+
+    try:
+        test_suite = json.loads(json_file.read())
+        test_suite["statistics"] = { "passed" : 0, "failed" : 0, "startTime" : str(datetime.now()) }
+        for ( case_id, case ) in enumerate(test_suite["tests"]):
+            ( script_status, script_output ) = commands.getstatusoutput(case["script"])
+            if script_status == 0:
+                sign = "."
+                script_result = True
+                test_suite["statistics"]["passed"] += 1
+            else:
+                sign = "F"
+                script_result = False
+                test_suite["statistics"]["failed"] += 1
+            sys.stdout.write(sign)
+            test_suite["tests"][case_id]["result"] = script_result
+            test_suite["tests"][case_id]["output"] = script_output
+        test_suite["statistics"]["endTime"] = str(datetime.now())
+        print # New line
+        template = Template(open("templates/report.html", "r").read())
+        report_file = NamedTemporaryFile(suffix = ".html", delete = False)
+        report_file.write(template.render(suite = test_suite))
+        print "\n  The report was written to %s\n" % report_file.name
+    except Exception as error:
+        sys.stderr.write("\n  %s\n\n" % (str(error)))
+        sys.exit(3)
