@@ -1,5 +1,6 @@
 #!/usr/bin/env /usr/bin/python
 
+import os
 import sys
 import json
 import commands
@@ -31,12 +32,12 @@ if __name__ == "__main__":
                 sign = "F"
                 script_result = False
                 test_suite["statistics"]["failed"] += 1
-            sys.stdout.write(sign)
+            sys.stdout.write(sign) ; sys.stdout.flush()
             test_suite["tests"][case_id]["result"] = script_result
             test_suite["tests"][case_id]["output"] = script_output
         test_suite["statistics"]["endTime"] = str(datetime.now())
         print # New line
-        template = Template(open("templates/report.html", "r").read())
+        template = Template(open(os.path.dirname(__file__) + "/templates/report.html", "r").read())
         report_file = NamedTemporaryFile(suffix = ".html", delete = False)
         report_file.write(template.render(suite = test_suite))
         print "\n  The report was written to %s\n" % report_file.name
