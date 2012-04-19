@@ -39,7 +39,7 @@
         <script type="text/javascript" language="javascript">
             function changeVisibility(id) {
                 d = document.getElementById(id);
-                if ( d.style.display == 'none' ) {
+                if ( d.style.display == 'none' || d.style.display == "" ) {
                     d.style.display = 'block';
                 } else {
                     d.style.display = 'none';
@@ -55,14 +55,14 @@
             <h2>Failed ({{ suite.statistics.failed }})</h2>
             {% for test_case in suite.tests %}
                 {% if test_case.result == False %}
-            <div id="testcasefailed{{loop.index}}"><a href="#" class="failed" onClick="changeVisibility('testcaseoutputfailed{{loop.index}}')">{{ test_case.name }}</a><div>
+            <div id="testcasefailed{{loop.index}}"><a href="#testcasefailed{{loop.index}}" class="failed" onClick="changeVisibility('testcaseoutputfailed{{loop.index}}')">{{ test_case.name }}</a><div>
             <div class="testcaseoutput" id="testcaseoutputfailed{{loop.index}}"><pre>{{ test_case.output }}</pre></div>
                 {% endif %}
             {% endfor %}
             <h2>Passed ({{ suite.statistics.passed }})</h2>
             {% for test_case in suite.tests %}
                 {% if test_case.result == True %}
-            <div id="testcasepassed{{loop.index}}"><a href="#" class="passed" onClick="changeVisibility('testcaseoutputpassed{{loop.index}}')">{{ test_case.name }}</a><div>
+            <div id="testcasepassed{{loop.index}}"><a href="#testcasepassed{{loop.index}}" class="passed" onClick="changeVisibility('testcaseoutputpassed{{loop.index}}')">{{ test_case.name }}</a><div>
             <div class="testcaseoutput" id="testcaseoutputpassed{{loop.index}}"><pre>{{ test_case.output }}</pre></div>
                 {% endif %}
             {% endfor %}
