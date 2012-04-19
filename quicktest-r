@@ -1,5 +1,7 @@
 #!/usr/bin/env /usr/bin/python
+# -*- coding: utf-8 -*-
 
+import codecs
 import os
 import sys
 import json
@@ -11,7 +13,7 @@ from datetime import datetime
 if __name__ == "__main__":
     
     try:
-        json_file = open(sys.argv[1], "r")
+        json_file = codecs.open(sys.argv[1], "r", "utf-8")
     except IndexError:
         sys.stderr.write("\n  Usage: %s  <json_file>\n\n" % ( sys.argv[0] ))
         sys.exit(1)
@@ -37,9 +39,9 @@ if __name__ == "__main__":
             test_suite["tests"][case_id]["output"] = script_output
         test_suite["statistics"]["endTime"] = str(datetime.now())
         print # New line
-        template = Template(open(os.path.dirname(__file__) + "/templates/report.html", "r").read())
+        template = Template(codecs.open(os.path.dirname(__file__) + "/templates/report.html", "r", "utf-8").read())
         report_file = NamedTemporaryFile(suffix = ".html", delete = False)
-        report_file.write(template.render(suite = test_suite))
+        report_file.write(template.render(suite = test_suite).encode("utf-8"))
         print "\n  The report was written to %s\n" % report_file.name
     except Exception as error:
         sys.stderr.write("\n  %s\n\n" % (str(error)))
